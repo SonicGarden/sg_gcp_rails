@@ -1,0 +1,26 @@
+PATH
+  remote: .
+  specs:
+    sg_gcp_rails (0.1.0)
+      em-websocket (~> 0.5.3)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    em-websocket (0.5.3)
+      eventmachine (>= 0.12.9)
+      http_parser.rb (~> 0)
+    eventmachine (1.2.7)
+    http_parser.rb (0.8.0)
+    rake (13.1.0)
+
+PLATFORMS
+  arm64-darwin-23
+  ruby
+
+DEPENDENCIES
+  rake (~> 13.0)
+  sg_gcp_rails!
+
+BUNDLED WITH
+   2.5.3
