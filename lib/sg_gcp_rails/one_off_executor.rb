@@ -2,17 +2,19 @@ require 'em-websocket'
 require 'pty'
 
 class OneOffExecutor
-  def initialize(port, auth_key)
+  def initialize(port, auth_key, cloud_sql_connection_name)
     @port = port
     @auth_key = auth_key
+    @cloud_sql_connection_name = cloud_sql_connection_name
     @current_connections = 0
 
     $stdout.sync = true
   end
 
   def run
-    puts "Starting one-off instance... port: #{@port}"
+    CloudSqlActivator.new(@cloud_sql_connection_name).run
 
+    puts "Starting one-off instance... port: #{@port}"
     EventMachine.run do
       EventMachine::WebSocket.start(host: "0.0.0.0", port: @port) do |ws|
         ws.onopen do |handshake|
