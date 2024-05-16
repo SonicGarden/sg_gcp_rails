@@ -21,7 +21,7 @@ class OneOffExecutor
 
             # ENV['TERM'] = 'xterm-256color'
             pty, slave = PTY.open
-            pid = spawn('bash -i', in: slave, out: slave, err: slave)
+            pid = spawn('/bin/bash', in: slave, out: slave, err: slave)
             slave.close
 
             # ptyとwebsocketの間でデータをやり取りするためのスレッド
