@@ -6,6 +6,8 @@ class OneOffExecutor
     @port = port
     @auth_key = auth_key
     @current_connections = 0
+
+    $stdout.sync = true
   end
 
   def run
