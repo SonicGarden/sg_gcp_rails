@@ -19,7 +19,7 @@ class OneOffExecutor
           if authorized?(handshake) && @current_connections == 0
             @current_connections += 1
 
-            # ENV['TERM'] = 'xterm-256color'
+            ENV['TERM'] = 'xterm-256color'
             pty, slave = PTY.open
             pid = spawn('/bin/bash', in: slave, out: slave, err: slave)
             slave.close
