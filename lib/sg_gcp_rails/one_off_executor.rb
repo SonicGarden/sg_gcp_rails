@@ -12,7 +12,7 @@ class OneOffExecutor
   end
 
   def run
-    CloudSqlActivator.new(@cloud_sql_connection_name).run
+    # CloudSqlActivator.new(@cloud_sql_connection_name).run
 
     puts "Starting one-off instance... port: #{@port}"
     EventMachine.run do
