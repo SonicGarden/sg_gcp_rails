@@ -8,7 +8,7 @@ class CloudSqlActivator
 
     `curl -o cloud-sql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.11.1/cloud-sql-proxy.linux.amd64`
     `chmod +x cloud-sql-proxy`
-    `sudo mkdir /cloudsql; sudo chmod 777 /cloudsql`
+    `mkdir /cloudsql; chmod 777 /cloudsql`
     `./cloud-sql-proxy --unix-socket /cloudsql #{@connection_name} &`
   end
 end
