@@ -36,11 +36,12 @@ class OneOffActivator
   end
 
   def launch_websocket_server
-    puts "Launch one-off instance... port: #{@port}"
+    puts "Launch websocket server... port: #{@port}"
+
     EventMachine.run do
       EventMachine::WebSocket.start(host: "0.0.0.0", port: @port) do |ws|
         ws.onopen do |handshake|
-          puts "Connected from #{ws.remote_ip}"
+          puts "Connected from #{ws.remote_ip}."
 
           @mutex.synchronize do
             authorized = authorized?(handshake)
@@ -82,7 +83,7 @@ class OneOffActivator
               end
 
               ws.onclose do
-                puts "WebSocket closed"
+                puts "Connection closed."
 
                 begin
                   Process.kill "KILL", pid
@@ -97,7 +98,7 @@ class OneOffActivator
                 EventMachine.stop
               end
             else
-              puts "Connection closed. authorized: #{authorized}, connected: #{@connected}"
+              puts "Connection refused. authorized: #{authorized}, connected: #{@connected}"
 
               ws.close_connection
             end
