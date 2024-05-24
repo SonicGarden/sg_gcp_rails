@@ -1,5 +1,7 @@
 require 'em-websocket'
 require 'pty'
+require 'http'
+require 'retryable'
 
 class OneOffActivator
   CLOUD_SQL_PROXY_VERSION = 'v2.11.1'.freeze
