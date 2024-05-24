@@ -19,8 +19,6 @@ class OneOffActivator
   def activate
     launch_cloud_sql_proxy
     launch_websocket_server
-
-    send_callback(:activated)
   end
 
   private
@@ -116,6 +114,8 @@ class OneOffActivator
           end
         end
       end
+
+      send_callback(:activated)
     end
   end
 
