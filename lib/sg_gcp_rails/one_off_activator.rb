@@ -4,20 +4,21 @@ require 'pty'
 class OneOffActivator
   CLOUD_SQL_PROXY_VERSION = 'v2.11.1'.freeze
 
-  def initialize(port, auth_key)
+  def initialize(port, auth_key, callback_url)
     @port = port
     @auth_key = auth_key
+    @callback_url = callback_url
+
     @cloud_sql_connection_name = ENV.fetch('CLOUD_SQL_CONNECTION_NAME')
     @connected = false
-
     @mutex = Mutex.new
-
-    $stdout.sync = true
   end
 
   def activate
     launch_cloud_sql_proxy
     launch_websocket_server
+
+    send_callback(:activated)
   end
 
   private
@@ -48,6 +49,7 @@ class OneOffActivator
             if authorized && !@connected
               @connected = true
 
+              $stdout.sync = true
               pty, slave = PTY.open
               pid = spawn(
                 {'TERM' => 'xterm-256color'},
@@ -99,15 +101,27 @@ class OneOffActivator
 
                 pty.close
                 EventMachine.stop
+
+                send_callback(:disconnected)
               end
             else
               puts "Connection refused. authorized: #{authorized}, connected: #{@connected}"
 
               ws.close_connection
             end
+
+            send_callback(:connected)
           end
         end
       end
     end
+  end
+
+  def send_callback(event)
+    Retryable.retryable do
+      HTTP.post(@callback_url, form: {event:})
+    end
+  rescue HTTP::Error => e
+    puts "Failed to send callback. url: #{@callback_url}, error: #{e}"
   end
 end
