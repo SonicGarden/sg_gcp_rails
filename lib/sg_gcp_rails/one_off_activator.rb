@@ -48,9 +48,12 @@ class OneOffActivator
             if authorized && !@connected
               @connected = true
 
-              ENV['TERM'] = 'xterm-256color'
               pty, slave = PTY.open
-              pid = spawn('/bin/bash', in: slave, out: slave, err: slave)
+              pid = spawn(
+                {'TERM' => 'xterm-256color'},
+                '/bin/bash',
+                in: slave, out: slave, err: slave
+              )
               slave.close
 
               # ptyとwebsocketの間でデータをやり取りするためのスレッド
